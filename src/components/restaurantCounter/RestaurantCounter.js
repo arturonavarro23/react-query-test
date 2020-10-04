@@ -1,13 +1,15 @@
 import React from 'react';
 import { Heading } from '@chakra-ui/core';
 
-import useGetRestaurants from '../../hooks/useGetRestaurants';
+import { useQueryParams } from '../../hooks/useQueryParams';
+import { useGetPaginatedRestaurants } from '../../hooks/useGetPaginatedRestaurants';
 
 const RestaurantCounter = () => {
-  const { data } = useGetRestaurants();
+  const { page = 1 } = useQueryParams();
+  const { resolvedData } = useGetPaginatedRestaurants(page);
   return (
     <Heading as="h6" textAlign="center" fontSize="1.2em">
-      Total Restaurants: {data && (data.length || 0)}
+      Total Restaurants: {resolvedData?.total || 0}
     </Heading>
   );
 };
