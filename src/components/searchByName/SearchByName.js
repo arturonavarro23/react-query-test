@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FormLabel, FormControl, Input, Box, Text } from '@chakra-ui/core';
 import { Link } from 'react-router-dom';
 
 import useSearchRestaurant from '../../hooks/useSearchRestaurant';
+import { useDebouncedTerm } from '../../hooks/useDebouncedTerm';
 
 const SearchByName = () => {
-  const [term, setTerm] = useState('');
-  const [debouncedTerm, setDebouncedTerm] = useState(term);
+  const [term, debouncedTerm, setTerm] = useDebouncedTerm();
   const { data } = useSearchRestaurant(debouncedTerm);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedTerm(term);
-    }, 300);
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [term]);
 
   return (
     <>
@@ -27,6 +18,7 @@ const SearchByName = () => {
           type="text"
           onChange={(e) => setTerm(e.target.value)}
           autoComplete="off"
+          value={term}
         />
       </FormControl>
       {data &&
