@@ -9,7 +9,7 @@ import useUpdateRestaurant from '../../hooks/useUpdateRestaurant';
 const Details = () => {
   const { id } = useParams();
   const { data: restaurant, status } = useGetRestaurantById(id);
-  const [updateRestaurant] = useUpdateRestaurant();
+  const { mutate: updateRestaurant } = useUpdateRestaurant();
 
   const onSubmit = (values) => {
     updateRestaurant({

@@ -7,5 +7,8 @@ const getRestaurants = async () => {
 };
 
 export default () => {
-  return useQuery('restaurants', getRestaurants);
+  return useQuery({
+    queryKey: 'restaurants',
+    queryFn: getRestaurants,
+  });
 };

@@ -61,7 +61,7 @@ const Form = ({ onSubmit, isLoading, clearValues, defaultValues = {} }) => {
           type="submit"
           isDisabled={isLoading}
         >
-          Add a Restaurant
+          {Object.keys(defaultValues).length > 0 ? 'Update restaurant' : 'Add a Restaurant'}
         </Button>
       </form>
     </Box>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { ThemeProvider, CSSReset } from '@chakra-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { ReactQueryCacheProvider, makeQueryCache } from 'react-query';
-import { ReactQueryDevtools } from 'react-query-devtools';
+import { QueryClientProvider, QueryClient } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools'
+
 import { Flex } from '@chakra-ui/core';
 
 import Header from './components/header';
@@ -11,19 +12,13 @@ import Details from './pages/details';
 import RestaurantCounter from './components/restaurantCounter';
 import SearchByName from './components/searchByName';
 
-const queryCache = makeQueryCache({
-  defaultConfig: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+const queryClient = new QueryClient()
 
 function App() {
   return (
     <ThemeProvider>
       <CSSReset />
-      <ReactQueryCacheProvider queryCache={queryCache}>
+      <QueryClientProvider client={queryClient}>
         <Router>
           <Header />
           <Flex direction={{ xs: 'column-reverse', lg: 'row' }}>
@@ -40,7 +35,7 @@ function App() {
           </Flex>
         </Router>
         <ReactQueryDevtools initialIsOpen={false} />
-      </ReactQueryCacheProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

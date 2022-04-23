@@ -6,10 +6,10 @@ import { useGetPaginatedRestaurants } from '../../hooks/useGetPaginatedRestauran
 
 const RestaurantCounter = () => {
   const { page = 1 } = useQueryParams();
-  const { resolvedData } = useGetPaginatedRestaurants(page);
+  const { data } = useGetPaginatedRestaurants(page);
   return (
     <Heading as="h6" textAlign="center" fontSize="1.2em">
-      Total Restaurants: {resolvedData?.total || 0}
+      Total Restaurants: {data?.total || 0}
     </Heading>
   );
 };

@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import api from '../api';
 
 const createRestaurant = async (restaurant) => {
@@ -7,12 +7,12 @@ const createRestaurant = async (restaurant) => {
 };
 
 export const useCreateRestaurant = () => {
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   return useMutation(createRestaurant, {
     onSuccess: () => {
-      queryCache.invalidateQueries('restaurants');
-      queryCache.invalidateQueries('paginated-restautrants');
+      queryClient.invalidateQueries('restaurants');
+      queryClient.invalidateQueries('paginated-restautrants');
     },
   });
 };

@@ -11,11 +11,10 @@ const Home = () => {
   const { page = 1 } = useQueryParams();
   const {
     status,
-    resolvedData,
-    latestData,
-    isFetching,
+    data,
+    isFetching
   } = useGetPaginatedRestaurants(page);
-  const [createRestaurant, { isLoading, isSuccess }] = useCreateRestaurant();
+  const { mutate: createRestaurant, isLoading, isSuccess } = useCreateRestaurant();
 
   function onSubmit(values) {
     createRestaurant(values);
@@ -37,8 +36,8 @@ const Home = () => {
           {status === 'success' && (
             <RestaurantList
               isFetching={isFetching}
-              restaurants={resolvedData.restaurants}
-              pagination={latestData?.pagination}
+              restaurants={data?.restaurants}
+              pagination={data?.pagination}
             />
           )}
         </Flex>

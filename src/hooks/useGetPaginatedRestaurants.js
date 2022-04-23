@@ -1,10 +1,12 @@
 import React from 'react';
-import { usePaginatedQuery, useQueryCache } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import api from '../api';
 
 const LIMIT = 4;
 
-const getRestaurants = async (key, page) => {
+const getRestaurants = async ({queryKey}) => {
+  // eslint-disable-next-line no-unused-vars
+  const [_, page] = queryKey;
   const { data, headers } = await api.get('/restaurants', {
     params: {
       _page: page,
@@ -25,20 +27,23 @@ const getRestaurants = async (key, page) => {
 };
 
 export const useGetPaginatedRestaurants = (page = 0) => {
-  const cache = useQueryCache();
-  const { latestData, ...rest } = usePaginatedQuery(
-    ['paginated-restautrants', page],
-    getRestaurants
-  );
+  const queryClient = useQueryClient();
+  const { data, ...rest } = useQuery({
+    queryKey: ['paginated-restautrants', page],
+    queryFn: getRestaurants,
+    params: {
+      page,
+    },
+  });
 
   React.useEffect(() => {
-    if (latestData?.pagination?.next) {
-      cache.prefetchQuery(['paginated-restautrants', page + 1], getRestaurants);
+    if (data?.hasMore) {
+      queryClient.prefetchQuery(['paginated-restautrants', page + 1], getRestaurants);
     }
-  }, [latestData, page, cache]);
+  }, [data, page, queryClient]);
 
   return {
-    latestData,
+    data,
     ...rest,
   };
 };

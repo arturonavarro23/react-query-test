@@ -1,4 +1,4 @@
-import { useMutation, useQueryCache } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import api from '../api';
 
 const updateRestaurant = async (restaurant) => {
@@ -7,29 +7,29 @@ const updateRestaurant = async (restaurant) => {
 };
 
 export default () => {
-  const queryCache = useQueryCache();
+  const queryClient = useQueryClient();
 
   return useMutation(updateRestaurant, {
     onMutate: (newRestaurant) => {
-      queryCache.cancelQueries(['restaurants', newRestaurant.id.toString()]);
+      queryClient.cancelQueries(['restaurants', newRestaurant.id.toString()]);
 
-      const previousRestaurant = queryCache.getQueryData([
+      const previousRestaurant = queryClient.getQueryData([
         'restaurants',
-        newRestaurant.id.toString(),
+        newRestaurant?.id?.toString(),
       ]);
 
-      queryCache.setQueryData(['restaurants', newRestaurant.id.toString()], newRestaurant);
+      queryClient.setQueryData(['restaurants', newRestaurant?.id?.toString()], newRestaurant);
 
       return () => {
-        queryCache.setQueryData(
-          ['restaurants', newRestaurant.id.toString()],
+        queryClient.setQueryData(
+          ['restaurants', newRestaurant?.id?.toString()],
           previousRestaurant
         );
       };
     },
     onError: (err, newRestaurant, rollback) => rollback(),
     onSettled: (newRestaurant) => {
-      queryCache.invalidateQueries(['restaurants', newRestaurant.id.toString()]);
+      queryClient.invalidateQueries(['restaurants', newRestaurant?.id?.toString()]);
     },
   });
 };

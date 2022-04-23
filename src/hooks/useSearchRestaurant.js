@@ -1,7 +1,9 @@
 import { useQuery } from 'react-query';
 import api from '../api';
 
-const getRestaurants = async (key, searchTerm) => {
+const getRestaurants = async ({queryKey}) => {
+  // eslint-disable-next-line no-unused-vars
+  const [_ , searchTerm] = queryKey;
   const res = await api.get('/restaurants', {
     params: {
       name_like: searchTerm,
@@ -11,7 +13,9 @@ const getRestaurants = async (key, searchTerm) => {
 };
 
 export default (searchTerm) => {
-  return useQuery(['searchRestaurant', searchTerm], getRestaurants, {
-    enabled: searchTerm,
+  return useQuery({
+    queryKey: ['searchRestaurant', searchTerm],
+    queryFn: getRestaurants,
+    enabled: !!searchTerm,
   });
 };
